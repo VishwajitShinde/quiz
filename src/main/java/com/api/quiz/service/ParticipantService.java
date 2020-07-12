@@ -2,6 +2,10 @@ package com.api.quiz.service;
 
 import com.api.quiz.entity.Participant;
 import com.api.quiz.repository.ParticipantRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +16,21 @@ public class ParticipantService {
     @Autowired
     private ParticipantRepository repository;
 
+    private final Logger logger = LoggerFactory. getLogger(ParticipantService.class);
+
+    private ObjectMapper mapper = new ObjectMapper();
+
+    /**
+     *
+     * @param participant
+     * @return
+     */
     public Participant saveParticipant(Participant participant) {
-        return repository.save(participant);
+        Participant dbParticipant = repository.findByNameAndEmail( participant.getName(), participant.getEmail() );
+        logger.info(" Registration Check Existing Participent : {} ", participant );
+        participant =  ( dbParticipant != null ) ? dbParticipant : repository.save(participant);
+        logger.info(" Participant : {} > Registration Successful. ", participant );
+        return participant;
     }
 
     public List<Participant> saveParticipants(List<Participant> participants) {
@@ -46,6 +63,4 @@ public class ParticipantService {
         */
         return repository.save(existingParticipant);
     }
-
-
 }

@@ -1,0 +1,172 @@
+[
+  {
+    "QnID": 1,
+    "Qn": "What does HTML stand for?",
+    "ImageName": null,
+    "Option1": "Hyper Trainer Marking Language",
+    "Option2": "Hyper Text Marketing Language",
+    "Option3": "Hyper Text Markup Language",
+    "Option4": "Hyper Text Markup Leveler",
+    "Answer": 2
+  },
+  {
+    "QnID": 2,
+    "Qn": "In Java, a method is a container that holds classes.",
+    "ImageName": null,
+    "Option1": "True",
+    "Option2": "False",
+    "Option3": null,
+    "Option4": null,
+    "Answer": 1
+  },
+  {
+    "QnID": 3,
+    "Qn": "Who invented the first computer ?",
+    "ImageName": null,
+    "Option1": "Charles Babbage",
+    "Option2": "Linus Torvalds",
+    "Option3": "Dennis Ritchie",
+    "Option4": "James Gosling",
+    "Answer": 0
+  },
+  {
+    "QnID": 4,
+    "Qn": "Which of the following languages is more suited to a structured program?",
+    "ImageName": null,
+    "Option1": "FORTRAN",
+    "Option2": "BASIC",
+    "Option3": "PASCAL",
+    "Option4": "PL/1",
+    "Answer": 2
+  },
+  {
+    "QnID": 5,
+    "Qn": "The brain of any computer system is",
+    "ImageName": null,
+    "Option1": "ALU",
+    "Option2": "Memory",
+    "Option3": "CPU",
+    "Option4": "Control unit",
+    "Answer": 2
+  },
+  {
+    "QnID": 6,
+    "Qn": "Which of the following computer language is used for artificial intelligence?",
+    "ImageName": null,
+    "Option1": "FORTRAN",
+    "Option2": "PROLOG",
+    "Option3": "C",
+    "Option4": "COBOL",
+    "Answer": 1
+  },
+  {
+    "QnID": 7,
+    "Qn": "Which of the following is the 1''s complement of 10?",
+    "ImageName": null,
+    "Option1": "01",
+    "Option2": "110",
+    "Option3": "11",
+    "Option4": "10",
+    "Answer": 0
+  },
+  {
+    "QnID": 8,
+    "Qn": "The binary system uses powers of",
+    "ImageName": null,
+    "Option1": "2",
+    "Option2": "10",
+    "Option3": "8",
+    "Option4": "16",
+    "Answer": 0
+  },
+  {
+    "QnID": 9,
+    "Qn": "A computer program that convert sassembly language to machine language is",
+    "ImageName": null,
+    "Option1": "Compiler",
+    "Option2": "Interpreter",
+    "Option3": "Assembler",
+    "Option4": "Comparator",
+    "Answer": 2
+  },
+  {
+    "QnID": 10,
+    "Qn": "You can add a row using SQL in a database with which of the following?",
+    "ImageName": null,
+    "Option1": "ADD",
+    "Option2": "CREATE",
+    "Option3": "INSERT",
+    "Option4": "MAKE",
+    "Answer": 2
+  },
+  {
+    "QnID": 11,
+    "Qn": "The SQL keyword(s)________ is used with wildcards.",
+    "ImageName": null,
+    "Option1": "LIKE only",
+    "Option2": "IN only",
+    "Option3": "NOT IN only",
+    "Option4": "IN and NOT IN",
+    "Answer": 0
+  },
+  {
+    "QnID": 12,
+    "Qn": "SQL query and modification commands make up a(n)",
+    "ImageName": null,
+    "Option1": "DDL",
+    "Option2": "DML",
+    "Option3": "HTML",
+    "Option4": "XML",
+    "Answer": 1
+  },
+  {
+    "QnID": 13,
+    "Qn": "Inside which HTML element do we put the JavaScript?",
+    "ImageName": null,
+    "Option1": "<javascript>",
+    "Option2": "<js>",
+    "Option3": "<scripting>",
+    "Option4": "<script>",
+    "Answer": 3
+  },
+  {
+    "QnID": 14,
+    "Qn": "The external Java Script file must contain the <script> tag.",
+    "ImageName": null,
+    "Option1": "True",
+    "Option2": "False",
+    "Option3": null,
+    "Option4": null,
+    "Answer": 1
+  },
+  {
+    "QnID": 15,
+    "Qn": "How can you add a comment in a JavaScript?",
+    "ImageName": null,
+    "Option1": "''This is a comment",
+    "Option2": "<!--This is a comment-->",
+    "Option3": "//This is a comment",
+    "Option4": null,
+    "Answer": 2
+  },
+  {
+    "QnID": 16,
+    "Qn": "Name the following device.",
+    "ImageName": "q16.jpg",
+    "Option1": "Graphics card",
+    "Option2": "Keyboard",
+    "Option3": "CPU",
+    "Option4": "Mouse",
+    "Answer": 3
+  },
+  {
+    "QnID": 17,
+    "Qn": "Following picture represnts.",
+    "ImageName": "q17.png",
+    "Option1": "Full Outer Join",
+    "Option2": "Left Join",
+    "Option3": "Right Join",
+    "Option4": "Inner Join",
+    "Answer": 3
+  }
+]
