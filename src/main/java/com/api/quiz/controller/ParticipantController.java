@@ -24,7 +24,7 @@ public class ParticipantController {
 
     private ObjectMapper mapper = new ObjectMapper();
 
-    @RequestMapping(value = "/api/registerParticipant", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
+    @RequestMapping(value = "/registerParticipant", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Participant registerParticipant(@RequestBody Participant participant) {
 

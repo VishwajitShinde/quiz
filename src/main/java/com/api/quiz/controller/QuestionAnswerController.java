@@ -29,7 +29,7 @@ public class QuestionAnswerController {
     private ObjectMapper mapper = new ObjectMapper();
 
 
-    @RequestMapping(value = "/api/questions", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/questions", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Map<String, Object>> getQuestions() {
         try {
             File file = new File(QUESTIONS_ANSWER_JSON_FILE_PATH) ;
@@ -55,7 +55,7 @@ public class QuestionAnswerController {
         }
     }
 
-    @RequestMapping(value = "/api/answers", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/answers", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Map getAnswers(@RequestBody Set<Integer> questionIds) {
         try {
             logger.info(" controller :/api/Answers, questionIds Request Body : {} ", mapper.writeValueAsString(questionIds));
