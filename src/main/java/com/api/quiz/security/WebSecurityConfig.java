@@ -69,17 +69,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable()
 			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-			.authorizeRequests().antMatchers("/api/auth/**").permitAll()
+			.authorizeRequests().antMatchers("/auth/**").permitAll()
 
-			.antMatchers("/api/test/**").permitAll()
-			.antMatchers("api/questions/**").permitAll()
+			.antMatchers("/test/**").permitAll()
+			.antMatchers("/questions/**").permitAll()
+
 
 				// Swagger Enabling
 			.antMatchers("/configuration/ui/**","/webjars/**","/swagger-ui.html","/swagger-resources/**","/configuration/security/**","/v2/api-docs/**").permitAll()
 
 			.anyRequest().authenticated();
 
-		// Adding it for Https secirity + https
+		// Adding it for Https security + https
         http
                 .requiresChannel()
                 .anyRequest()
