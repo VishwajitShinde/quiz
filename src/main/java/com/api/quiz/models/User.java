@@ -1,19 +1,22 @@
 package com.api.quiz.models;
 
+import com.api.quiz.payload.request.SignupRequest;
 import com.api.quiz.util.RoleObjectConverter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(	name = "users", 
 		uniqueConstraints = { 
-			@UniqueConstraint(columnNames = "username"),
+			@UniqueConstraint(columnNames = "mobile"),
 			@UniqueConstraint(columnNames = "email") 
 		})
 public class User implements Serializable  {
@@ -21,11 +24,6 @@ public class User implements Serializable  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@NotBlank
-	@Size(max = 20)
-	@Column( name = "username", unique = true )
-	private String username;
 
 	@NotBlank
 	@Size(max = 50)
@@ -38,26 +36,41 @@ public class User implements Serializable  {
 	@Column( name = "password", nullable = false )
 	private String password;
 
-	@Column( name = "mobile" , nullable = true)
-	@Size(max = 20)
+	@Column( name = "mobile", nullable = false, unique = true)
+	@Pattern(regexp="(^$|[0-9]{10})")
 	private String mobile;
 
-//	@ManyToMany
-//	@JoinTable(	name = "user_roles",
-//			joinColumns = @JoinColumn(name = "user_id"),
-//			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@Column( name = "first_name", nullable = true )
+	@Size(max = 20)
+	private String firstName ;
+
+	@Column( name = "last_name", nullable = true )
+	@Size(max = 20)
+	private String lastName ;
 
 	@Convert(converter = RoleObjectConverter.class)
 	private Set<Role> roles = new HashSet<>();
 
+	@Column( name = "creation_date", nullable = false )
+	private Date createdDate ;
+
+	@Column( name = "last_modified_date", nullable = false )
+	private Date modifiedDate ;
+
 	public User() {
+
 	}
 
-	public User(String username, String email, String password, String mobile) {
-		this.username = username;
+	public User( String email, String password, String mobile, String firstName, String lastName) {
 		this.email = email;
 		this.password = password;
 		this.mobile = mobile;
+
+		this.firstName = firstName;
+		this.lastName = lastName;
+
+		this.createdDate = new Date();
+		this.modifiedDate = new Date();
 	}
 
 	public Long getId() {
@@ -66,14 +79,6 @@ public class User implements Serializable  {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
 	}
 
 	public String getEmail() {
@@ -106,5 +111,37 @@ public class User implements Serializable  {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
 	}
 }

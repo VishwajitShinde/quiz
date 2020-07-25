@@ -1,24 +1,57 @@
 package com.api.quiz.payload.response;
 
+import com.api.quiz.models.User;
+import com.api.quiz.security.services.UserDetailsImpl;
+
+import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class JwtResponse {
 	private String token;
 	private String type = "Bearer";
 	private Long id;
-	private String username;
 	private String email;
 	private String mobile;
 	private List<String> roles;
 
-	public JwtResponse(String accessToken, Long id, String username, String email, String mobile, List<String> roles) {
+	private Date creationDate;
+	private Date lastModifiedDate;
+	private String firstName;
+	private String lastName;
+
+	public JwtResponse(String accessToken, Long id, String email, String mobile, List<String> roles) {
 		this.token = accessToken;
 		this.id = id;
-		this.username = username;
 		this.email = email;
 		this.mobile = mobile;
 		this.roles = roles;
+	}
+
+	public JwtResponse(String accessToken, User userObj ) {
+		this.token = accessToken;
+		this.id = userObj.getId();
+		this.email = userObj.getEmail();
+		this.mobile = userObj.getMobile();
+		this.roles = userObj.getRoles().stream()
+				.map( roleObj -> roleObj.getName().name() ).collect(Collectors.toList());
+		this.creationDate = userObj.getCreatedDate();
+		this.lastModifiedDate = userObj.getModifiedDate();
+		this.firstName = userObj.getFirstName();
+		this.lastName = userObj.getLastName();
+	}
+
+	public JwtResponse( String accessToken, UserDetailsImpl userDetails ) {
+		this.token = accessToken;
+		this.id = userDetails.getId();
+		this.email = userDetails.getEmail();
+		this.mobile = userDetails.getMobile();
+		this.roles = userDetails.getAuthorities().stream()
+				.map( simpleGrantedAuthority -> simpleGrantedAuthority.getAuthority() ).collect(Collectors.toList());
+		this.creationDate = userDetails.getCreationDate();
+		this.lastModifiedDate = userDetails.getLastModifiedDate();
+		this.firstName = userDetails.getFirstName();
+		this.lastName = userDetails.getLastName();
 	}
 
 	public String getAccessToken() {
@@ -53,14 +86,6 @@ public class JwtResponse {
 		this.email = email;
 	}
 
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
 	public List<String> getRoles() {
 		return roles;
 	}
@@ -71,5 +96,37 @@ public class JwtResponse {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public Date getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(Date lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 }

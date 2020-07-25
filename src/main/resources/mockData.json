@@ -1,0 +1,33 @@
+{
+  "user1": {
+    "request": {
+      "email": "dhamma4u@gmail.com",
+      "firstName": "dhammdip",
+      "lastName": "sawate",
+      "mobile": "8983682360",
+      "password": "password",
+      "role": [
+        "ROLE_TEACHER",
+        "ROLE_ADMIN"
+      ]
+    },
+    "response": {
+      "message": "User registered successfully!",
+      "response": {
+        "id": 2,
+        "email": "dhamma4u@gmail.com",
+        "mobile": "8983682360",
+        "roles": [
+          "ROLE_TEACHER",
+          "ROLE_ADMIN"
+        ],
+        "creationDate": "2020-07-25T20:43:10.951+00:00",
+        "lastModifiedDate": "2020-07-25T20:43:10.951+00:00",
+        "firstName": "dhammdip",
+        "lastName": "sawate",
+        "accessToken": null,
+        "tokenType": "Bearer"
+      }
+    }
+  }
+}

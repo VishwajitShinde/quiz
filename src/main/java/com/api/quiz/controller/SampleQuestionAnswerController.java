@@ -20,12 +20,12 @@ import java.util.stream.IntStream;
 @RequestMapping("/api")
 @CrossOrigin(origins = "*", allowedHeaders = "*",
         methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.HEAD, RequestMethod.TRACE, RequestMethod.OPTIONS,})
-public class QuestionAnswerController {
+public class SampleQuestionAnswerController {
     public static final String QUESTIONS_ANSWER_JSON_FILE_PATH = "G:\\TECH_LEARNING\\spring-boot\\quiz\\src\\main\\resources\\questions.json";
     @Autowired
     private ParticipantService service;
 
-    private final Logger logger = LoggerFactory.getLogger(QuestionAnswerController.class);
+    private final Logger logger = LoggerFactory.getLogger(SampleQuestionAnswerController.class);
 
     private ObjectMapper mapper = new ObjectMapper();
 

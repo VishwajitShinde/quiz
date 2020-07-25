@@ -1,9 +1,6 @@
 package com.api.quiz.security.services;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.api.quiz.models.User;
@@ -18,8 +15,6 @@ public class UserDetailsImpl implements UserDetails {
 
 	private Long id;
 
-	private String username;
-
 	private String email;
 
 	private String mobile;
@@ -29,14 +24,26 @@ public class UserDetailsImpl implements UserDetails {
 
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(Long id, String username, String email, String password, String mobile,
-			Collection<? extends GrantedAuthority> authorities) {
+	private String firstName;
+
+	private String lastName;
+
+	private Date creationDate;
+
+	private Date lastModifiedDate;
+
+	public UserDetailsImpl(Long id, String email, String password, String mobile,
+			Collection<? extends GrantedAuthority> authorities, String firstName,
+						   String lastName, Date creationDate, Date lastModifiedDate) {
 		this.id = id;
-		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.mobile = mobile;
 		this.authorities = authorities;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.creationDate = creationDate;
+		this.lastModifiedDate = lastModifiedDate;
 	}
 
 	public static UserDetailsImpl build(User user) {
@@ -45,12 +52,16 @@ public class UserDetailsImpl implements UserDetails {
 				.collect(Collectors.toList());
 
 		return new UserDetailsImpl(
-				user.getId(), 
-				user.getUsername(), 
+				user.getId(),
 				user.getEmail(),
 				user.getPassword(),
 				user.getMobile(),
-				authorities);
+				authorities,
+				user.getFirstName(),
+				user.getLastName(),
+				user.getCreatedDate(),
+				user.getModifiedDate()
+				);
 	}
 
 	@Override
@@ -77,7 +88,23 @@ public class UserDetailsImpl implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return username;
+		return email;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public Date getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
 	}
 
 	@Override

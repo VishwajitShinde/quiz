@@ -1,6 +1,6 @@
 package com.api.quiz.service;
 
-import com.api.quiz.entity.Question;
+import com.api.quiz.entity.QuestionBank;
 import com.api.quiz.repository.QuestionBankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,19 +12,19 @@ public class QuestionBankService {
     @Autowired
     QuestionBankRepository repository;
 
-    public Question saveQuestion(Question question) {
+    public QuestionBank saveQuestion(QuestionBank question) {
         return repository.save(question);
     }
 
-    public List<Question> saveQuestions(List<Question> questions) {
+    public List<QuestionBank> saveQuestions(List<QuestionBank> questions) {
         return repository.saveAll(questions);
     }
 
-    public List<Question> getQuestions() {
+    public List<QuestionBank> getQuestions() {
         return repository.findAll();
     }
 
-    public Question getQuestionById(int id) {
+    public QuestionBank getQuestionById(int id) {
         return repository.findById(id);
     }
 

@@ -6,11 +6,10 @@ import com.api.quiz.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-	Optional<User> findByUsername(String username);
 
-	Optional<User> findByUsernameOrEmail(String username, String email );
+	Optional<User> findByEmailOrMobile(String email, String mobile );
 
-	Boolean existsByUsername(String username);
+	Boolean existsByMobile(String mobile);
 
 	Boolean existsByEmail(String email);
 }

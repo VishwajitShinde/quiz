@@ -57,7 +57,7 @@ public class AuthController {
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
 		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+				new UsernamePasswordAuthenticationToken(loginRequest.getEmailOrMobile(), loginRequest.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
@@ -71,20 +71,25 @@ public class AuthController {
 
 		logger.info( "Controller [api/auth/signin] roles : {} ", roles  );
 
-		return ResponseEntity.ok(new JwtResponse(jwt,
-												 userDetails.getId(), 
-												 userDetails.getUsername(), 
-												 userDetails.getEmail(),
-												 userDetails.getMobile(),
-												 roles));
+//		return ResponseEntity.ok(new JwtResponse(jwt,
+//												 userDetails.getId(),
+//												 userDetails.getEmail(),
+//												 userDetails.getMobile(),
+//												 roles));
+		return ResponseEntity.ok(new JwtResponse(jwt,  userDetails));
 	}
 
+	/**
+	 *
+	 * @param signUpRequest
+	 * @return
+	 */
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+		if (userRepository.existsByMobile(signUpRequest.getMobile())) {
 			return ResponseEntity
 					.badRequest()
-					.body(new MessageResponse("Error: Username is already taken!"));
+					.body(new MessageResponse("Error: Mobile number already exist!"));
 		}
 
 		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
@@ -94,10 +99,12 @@ public class AuthController {
 		}
 
 		// Create new user's account
-		User user = new User(signUpRequest.getUsername(),
+		User user = new User(
 							 signUpRequest.getEmail(),
 							 encoder.encode(signUpRequest.getPassword()),
-				             signUpRequest.getMobile());
+				             signUpRequest.getMobile(),
+							 signUpRequest.getFirstName(),
+							 signUpRequest.getLastName()  );
 
 		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
@@ -129,12 +136,13 @@ public class AuthController {
 		user.setRoles(roles);
 		user = userRepository.save(user);
 
-		JwtResponse jwtResponse = new JwtResponse(null,
-				user.getId(),
-				user.getUsername(),
-				user.getEmail(),
-				user.getMobile(),
-				new ArrayList<>(strRoles));
+//		JwtResponse jwtResponse = new JwtResponse(null,
+//				user.getId(),
+//				user.getEmail(),
+//				user.getMobile(),
+//				new ArrayList<>(strRoles));
+
+		JwtResponse jwtResponse = new JwtResponse(null, user );
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!", jwtResponse));
 	}
