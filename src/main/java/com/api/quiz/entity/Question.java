@@ -18,8 +18,8 @@ public class Question {
 
     @Id
     @GeneratedValue
-    private int id;
-    private int exaSetterId;
+    private long id;
+    private long exaSetterId;
     private String queText;
     private String option_1;
     private String option_2;

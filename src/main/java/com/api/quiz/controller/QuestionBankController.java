@@ -1,8 +1,12 @@
 package com.api.quiz.controller;
 
 import com.api.quiz.entity.Question;
+import com.api.quiz.security.services.UserDetailsImpl;
 import com.api.quiz.service.QuestionBankService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +22,12 @@ public class QuestionBankController {
     private QuestionBankService service;
 
     @PostMapping("/addQuestion")
+    @PreAuthorize("hasRole('TEACHER')")
     public Question addQuestion(@RequestBody Question question) {
-        question.setExaSetterId(1);
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        UserDetailsImpl userPrincipal = (UserDetailsImpl) securityContext.getAuthentication().getPrincipal();
+
+        question.setExaSetterId(userPrincipal.getId());
         return service.saveQuestion(question);
     }
 
