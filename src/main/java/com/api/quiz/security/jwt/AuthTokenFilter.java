@@ -44,13 +44,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 				logger.info( " Authentication Status : {} ", authentication ) ;
 			}
+
+			response.setHeader("customError", jwtUtils.getTokenValidationMessage() );
 		} catch (Exception e) {
 			logger.error("Cannot set user authentication: {}", e);
+			response.setHeader("customError","Cannot set user authentication: " +  e.getMessage() );
 		}
 
-		request.setAttribute("message", jwtUtils.getTokenValidationMessage()  );
-		response.setHeader("customError", jwtUtils.getTokenValidationMessage() );
-
+		request.setAttribute("statusCode", jwtUtils.getResponseStatus()  );
 		filterChain.doFilter(request, response);
 	}
 
@@ -66,8 +67,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
 		logger.info(" headerAuth [ Authorization : Bearer ] Token : {} ", headerAuth );
 
-		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-			return headerAuth.substring(7, headerAuth.length());
+		if ( StringUtils.hasText(headerAuth) ) {
+			return headerAuth.startsWith("Bearer ") ?  headerAuth.substring(7, headerAuth.length()) :  headerAuth;
 		}
 
 		String paramAuth = request.getParameterMap().containsKey("access_token")

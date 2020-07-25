@@ -1,9 +1,6 @@
 package com.api.quiz.controller;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -36,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
 	Logger logger = LoggerFactory.getLogger(AuthController.class);
@@ -109,6 +106,8 @@ public class AuthController {
 			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
 					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 			roles.add(userRole);
+			strRoles = new HashSet<>();
+			strRoles.add(userRole.getName().name());
 		} else {
 			strRoles.forEach(role -> {
 				switch (role) {
@@ -129,7 +128,15 @@ public class AuthController {
 
 		user.setRoles(roles);
 		user = userRepository.save(user);
-		return ResponseEntity.ok(new MessageResponse("User registered successfully!", user));
+
+		JwtResponse jwtResponse = new JwtResponse(null,
+				user.getId(),
+				user.getUsername(),
+				user.getEmail(),
+				user.getMobile(),
+				new ArrayList<>(strRoles));
+
+		return ResponseEntity.ok(new MessageResponse("User registered successfully!", jwtResponse));
 	}
 
 	/**

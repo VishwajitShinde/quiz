@@ -78,7 +78,7 @@ public class SwaggerConfiguration {
     }
 
     private ApiKey apiKey() {
-        return new ApiKey("Bearer ", AUTHORIZATION_HEADER, "header" );
+        return new ApiKey("Token Access", AUTHORIZATION_HEADER, "header" );
     }
 
     private SecurityContext securityContext() {
@@ -94,6 +94,6 @@ public class SwaggerConfiguration {
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
         return Lists.newArrayList(
-            new SecurityReference("Bearer ", authorizationScopes));
+            new SecurityReference("Token Access", authorizationScopes));
     }
 }

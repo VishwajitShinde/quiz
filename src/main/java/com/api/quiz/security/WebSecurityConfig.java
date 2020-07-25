@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -70,13 +71,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.cors().and().csrf().disable()
 			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-			.authorizeRequests().antMatchers("/auth/**").permitAll()
+			.authorizeRequests().antMatchers("/api/auth/**").permitAll()
 
 			.antMatchers("/test/**").permitAll()
-			.antMatchers("/questions/**").permitAll()
+			.antMatchers("/api/questions/**").permitAll()
+
+			.antMatchers("/error").permitAll()
+			.antMatchers("/error/**").permitAll()
 
 				// Swagger Enabling
-			.antMatchers("/configuration/ui/**","/webjars/**","/swagger-ui.html","/swagger-resources/**","/configuration/security/**","/v2/api-docs/**").permitAll()
+			.antMatchers(
+					"/configuration/ui/**",
+					"/webjars/**",
+					"/swagger-ui.html",
+					"/swagger-resources/**",
+					"/configuration/security/**",
+					"/v2/api-docs/**",
+					"/swagger-ui/**").permitAll()
 
 			.anyRequest().authenticated();
 
@@ -86,6 +97,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .requiresSecure();
 
+
+
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+	}
+
+	@Override
+	public void configure(WebSecurity webSecurity) throws Exception
+	{
+		webSecurity
+				.ignoring()
+				// All of Spring Security will ignore the requests
+				.antMatchers("/error/**");
 	}
 }

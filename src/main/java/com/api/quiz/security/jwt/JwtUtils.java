@@ -21,7 +21,12 @@ public class JwtUtils {
 	private int jwtExpirationMs;
 
 	private String tokenValidationMessage = null;
+	private int responseStatus = 401;
 
+
+	public int getResponseStatus() {
+		return responseStatus;
+	}
 	public String getTokenValidationMessage() { return this.tokenValidationMessage; }
 
 
@@ -46,24 +51,44 @@ public class JwtUtils {
 		String exception = null ;
 		this.tokenValidationMessage = null;
 
+		/*
+				200	OK
+				201	Created
+				401	Unauthorized
+				403	Forbidden
+				404	Not Found
+				205 Reset Content
+				415 Unsupported Media Type
+				501 Not Implemented
+				511 Network Authentication Required
+				400 Bad Request
+				408 Request Timeout
+		 */
+
 		try {
 			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+			this.responseStatus = 200;
 			return true;
 		} catch (SignatureException e) {
 			logger.error("Invalid JWT signature: {}", e.getMessage());
 			exception = "Invalid JWT signature: " + e.getMessage() ;
+			this.responseStatus = 400;
 		} catch (MalformedJwtException e) {
 			logger.error("Invalid JWT token: {}", e.getMessage());
 			exception = "Invalid JWT token: " + e.getMessage() ;
+			this.responseStatus = 415;
 		} catch (ExpiredJwtException e) {
 			logger.error("JWT token is expired: {}", e.getMessage());
 			exception = "JWT token is expired: " + e.getMessage() ;
+			this.responseStatus = 205;
 		} catch (UnsupportedJwtException e) {
 			logger.error("JWT token is unsupported: {}", e.getMessage());
 			exception = "JWT token is unsupported:  " + e.getMessage() ;
+			this.responseStatus = 415;
 		} catch (IllegalArgumentException e) {
 			logger.error("JWT claims string is empty: {}", e.getMessage());
-			exception = "JWT claims string is empty:  " + e.getMessage() ;
+			exception = "JWT claims string is empty:  " + e.getMessage();
+			this.responseStatus = 415;
 		}
 
 		if ( exception != null )

@@ -19,20 +19,23 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 	private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
 
 	private static String CUSTOM_HEADER = "customError" ;
+	private static String STATUS_CODE = "statusCode" ;
 
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException authException) throws IOException, ServletException {
+			AuthenticationException authException) throws IOException {
 
 		String errorMessage =  response.containsHeader( CUSTOM_HEADER ) ? response.getHeader(CUSTOM_HEADER ) : null ;
+		int statusCode =  response.containsHeader( STATUS_CODE ) ? Integer.parseInt(response.getHeader( STATUS_CODE )) : HttpServletResponse.SC_UNAUTHORIZED ;
 
-		logger.error("Unauthorized error: {}, Response Custom Header ( customError ) : {} ",
-				authException.getMessage() , errorMessage );
+		logger.error("Unauthorized error: {}, [ {} ] Response Custom Header ( customError ) : {} ",
+				authException.getMessage(), statusCode, errorMessage );
 
 		final String message =  StringUtils.hasText(errorMessage) ? errorMessage : authException.getMessage();
-
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED,  message  );
+		response.setStatus(statusCode);
+		//response.sendError( HttpServletResponse.SC_UNAUTHORIZED,  message  );
+		response.sendError( statusCode,  message  );
 	}
 
 }
