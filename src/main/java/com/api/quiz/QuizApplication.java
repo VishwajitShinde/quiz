@@ -15,7 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import static springfox.documentation.builders.PathSelectors.regex;
 
-@EnableSwagger2
+//@EnableSwagger2
 @SpringBootApplication
 public class QuizApplication {
 
@@ -23,12 +23,15 @@ public class QuizApplication {
 		SpringApplication.run(QuizApplication.class, args);
 	}
 
+	/*
 	@Bean
-	public Docket productApi() {
+	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select().apis(RequestHandlerSelectors.basePackage("com.api.quiz"))
 				.paths(regex("/*.*"))
 				.build();
 
 	}
+	*/
+
 }
