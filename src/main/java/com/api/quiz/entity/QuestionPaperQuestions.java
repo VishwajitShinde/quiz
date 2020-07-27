@@ -48,5 +48,17 @@ public class QuestionPaperQuestions {
     private Date lastModifiedTime;
 
 
+    @PrePersist
+    public void creationTimeSet() {
+        this.creationTime = new Date();
+        this.lastModifiedTime = new Date();
+    }
+
+    @PreUpdate
+    public void modificationTimeSet() {
+        this.lastModifiedTime = new Date();
+    }
+
+
 
 }
