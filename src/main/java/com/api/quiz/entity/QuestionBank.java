@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
@@ -19,7 +20,7 @@ public class QuestionBank {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotNull
     @Column(name = "exa_setter_id" )
     private Long examSetterId;
 
@@ -59,4 +60,14 @@ public class QuestionBank {
         this.lastModifiedTime = new Date();
     }
 
+    @PrePersist
+    public void creationTimeSet() {
+        this.creationTime = new Date();
+        this.lastModifiedTime = new Date();
+    }
+
+    @PreUpdate
+    public void modificationTimeSet() {
+        this.lastModifiedTime = new Date();
+    }
 }
