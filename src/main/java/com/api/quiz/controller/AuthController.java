@@ -20,6 +20,7 @@ import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -88,13 +89,13 @@ public class AuthController {
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 		if (userRepository.existsByMobile(signUpRequest.getMobile())) {
 			return ResponseEntity
-					.badRequest()
+					.status(HttpStatus.CONFLICT)
 					.body(new MessageResponse("Error: Mobile number already exist!"));
 		}
 
 		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
 			return ResponseEntity
-					.badRequest()
+					.status(HttpStatus.CONFLICT)
 					.body(new MessageResponse("Error: Email is already in use!"));
 		}
 
