@@ -1,5 +1,6 @@
 package com.api.quiz.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
@@ -41,9 +42,11 @@ public class QuestionPaperQuestions {
     @Column(name = "answer" )
     private String answer;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "creation_time" )
     private Date creationTime;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "last_modified_time" )
     private Date lastModifiedTime;
 

@@ -1,7 +1,10 @@
 package com.api.quiz.payload.request;
 
+import lombok.ToString;
+
 import javax.validation.constraints.NotBlank;
 
+@ToString
 public class LoginRequest {
 	@NotBlank
 	private String emailOrMobile;

@@ -1,10 +1,5 @@
 package com.api.quiz.controller;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
 import com.api.quiz.models.ERole;
 import com.api.quiz.models.Role;
 import com.api.quiz.models.User;
@@ -16,7 +11,6 @@ import com.api.quiz.repository.RoleRepository;
 import com.api.quiz.repository.UserRepository;
 import com.api.quiz.security.jwt.JwtUtils;
 import com.api.quiz.security.services.UserDetailsImpl;
-import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +24,12 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -57,6 +57,8 @@ public class AuthController {
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
+		logger.info( "Controller [api/auth/signin] Login Request : {} ", loginRequest  );
+
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getEmailOrMobile(), loginRequest.getPassword()));
 
@@ -71,12 +73,6 @@ public class AuthController {
 				.collect(Collectors.toList());
 
 		logger.info( "Controller [api/auth/signin] roles : {} ", roles  );
-
-//		return ResponseEntity.ok(new JwtResponse(jwt,
-//												 userDetails.getId(),
-//												 userDetails.getEmail(),
-//												 userDetails.getMobile(),
-//												 roles));
 		return ResponseEntity.ok(new JwtResponse(jwt,  userDetails));
 	}
 
@@ -87,6 +83,9 @@ public class AuthController {
 	 */
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+
+		logger.info(" Controller [/api/auth/signup] request : {} ", signUpRequest );
+
 		if (userRepository.existsByMobile(signUpRequest.getMobile())) {
 			return ResponseEntity
 					.status(HttpStatus.CONFLICT)
@@ -102,7 +101,7 @@ public class AuthController {
 		// Create new user's account
 		User user = new User(
 							 signUpRequest.getEmail(),
-							 encoder.encode(signUpRequest.getPassword()),
+				             encoder.encode(signUpRequest.getPassword()),
 				             signUpRequest.getMobile(),
 							 signUpRequest.getFirstName(),
 							 signUpRequest.getLastName()  );
@@ -136,15 +135,8 @@ public class AuthController {
 
 		user.setRoles(roles);
 		user = userRepository.save(user);
-
-//		JwtResponse jwtResponse = new JwtResponse(null,
-//				user.getId(),
-//				user.getEmail(),
-//				user.getMobile(),
-//				new ArrayList<>(strRoles));
-
+		logger.info(" Sign Up  Successful For User : {} ", user.getEmail() ); //TODO Need to remove this Log
 		JwtResponse jwtResponse = new JwtResponse(null, user );
-
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!", jwtResponse));
 	}
 

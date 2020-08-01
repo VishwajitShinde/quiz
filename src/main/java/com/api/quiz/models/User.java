@@ -1,7 +1,7 @@
 package com.api.quiz.models;
 
-import com.api.quiz.payload.request.SignupRequest;
 import com.api.quiz.util.RoleObjectConverter;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -27,12 +27,12 @@ public class User implements Serializable  {
 
 	@NotBlank
 	@Size(max = 50)
-	@Email
+	@Email ( message = "Email is invalid")
 	@Column( name = "email", unique = true )
 	private String email;
 
 	@NotBlank
-	@Size(max = 120)
+	@Size(max = 100 )
 	@Column( name = "password", nullable = false )
 	private String password;
 
@@ -51,9 +51,11 @@ public class User implements Serializable  {
 	@Convert(converter = RoleObjectConverter.class)
 	private Set<Role> roles = new HashSet<>();
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@Column( name = "creation_date", nullable = false )
 	private Date createdDate ;
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@Column( name = "last_modified_date", nullable = false )
 	private Date modifiedDate ;
 
@@ -61,15 +63,23 @@ public class User implements Serializable  {
 
 	}
 
-	public User( String email, String password, String mobile, String firstName, String lastName) {
+	public User(String email, String password, String mobile, String firstName, String lastName) {
 		this.email = email;
 		this.password = password;
 		this.mobile = mobile;
 
 		this.firstName = firstName;
 		this.lastName = lastName;
+	}
 
+	@PrePersist
+	public void encodePassword() {
 		this.createdDate = new Date();
+		this.modifiedDate = new Date();
+	}
+
+	@PreUpdate
+	public void updateTime() {
 		this.modifiedDate = new Date();
 	}
 

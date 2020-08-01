@@ -1,34 +1,38 @@
 package com.api.quiz.payload.request;
 
+import com.api.quiz.models.Password;
+import lombok.ToString;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Set;
- 
+
+@ToString
 public class SignupRequest {
 
     @NotBlank
     @Size(max = 40)
-    @Email
+    @Email ( message = "Email is invalid ")
     private String email;
 
     private Set<String> role;
     
     @NotBlank
-    @Size(min = 6, max = 40)
+    @Password (message = "Password is invalid : Chars - min(8), max(20), uppercase - min(1), number - min(1), special char - min(1)")
     private String password;
 
     @NotBlank
-    @Pattern(regexp="(^$|[0-9]{10})")
+    @Pattern(regexp="(^$|[0-9]{10})", message = "Mobile number is invalid")
     private String mobile;
 
     @NotBlank
-    @Size(max = 20)
+    @Size( max = 20, message = "first name exceeds character limit : max 20 char")
     private String firstName;
 
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 20, message = "first name exceeds character limit : max 20 char" )
     private String lastName;
 
     public String getEmail() {
