@@ -5,10 +5,12 @@
       "firstName": "dhammdip",
       "lastName": "sawate",
       "mobile": "8983682360",
-      "password": "password",
+      "password": "Password1!",
       "role": [
         "ROLE_TEACHER",
-        "ROLE_ADMIN"
+        "ROLE_ADMIN",
+        "ROLE_STUDENT",
+        "ROLE_MODERATOR"
       ]
     },
     "response": {
@@ -19,7 +21,9 @@
         "mobile": "8983682360",
         "roles": [
           "ROLE_TEACHER",
-          "ROLE_ADMIN"
+          "ROLE_ADMIN",
+          "ROLE_STUDENT",
+          "ROLE_MODERATOR"
         ],
         "creationDate": "2020-07-25T20:43:10.951+00:00",
         "lastModifiedDate": "2020-07-25T20:43:10.951+00:00",
