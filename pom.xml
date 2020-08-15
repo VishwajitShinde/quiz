@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.api</groupId>
 	<artifactId>quiz-service</artifactId>
-	<version>0.0.4</version> <!-- Must get Update On Every Commit To Track -->
+	<version>0.0.5-SNAPSHOT</version> <!-- Must get Update On Every Commit To Track -->
 	<name>quiz-service</name>
 	<description>Quiz API project in Spring </description>
 
@@ -146,7 +146,9 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<addResources>true</addResources>
+					<finalName>quiz-service</finalName>
 				</configuration>
+
 			</plugin>
 
 			<plugin>
