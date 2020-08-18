@@ -1,0 +1,78 @@
+1. dashboard
+	User, Student, Admin 
+	
+	
+	
+  1.1. show table 
+		? content 
+		
+		
+Missing ? 
+1. Logout Option is not there 
+2. Dashboard,
+3. Subjects 
+4. Add Question : subject Tag 
+  - subject Tag, section tags 
+  -
+  
+  question -> 150 -> question pager -> subject -> section -> 
+  1. question - type -> 
+  
+  section -- > general, tag, 
+  tagwise -> question ->  
+  
+-----------------------------------------------------------------------------
+Create Question ->  
+ Radio button -> 
+ Questions added count ->
+ Time -> 
+
+Create Question Bank -> create Question Paper
+Step 1 : 
+1. Question Paper Tile
+2. Question count, time, 
+2. Question Description 
+3. editor - for instructions 
+
+---- -- 
+Table for showing questions with checkbox popup for change 
+
+-- List -> Time -> [] == [] 
+
+- 4 th step --> invitation  to student 
+----------------------------------------: 
+Finish Work for Teache 
+----------------------------------------:
+Fail ---- invites --> 
+----------------------------------------:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
