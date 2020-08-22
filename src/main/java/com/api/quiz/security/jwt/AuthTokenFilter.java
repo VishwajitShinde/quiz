@@ -66,18 +66,16 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	private String parseJwt(HttpServletRequest request) {
 		String headerAuth = request.getHeader("Authorization");
 
-		logger.info(" headerAuth [ Authorization : Bearer ] Token : {} ", headerAuth );
-
 		if ( StringUtils.hasText(headerAuth) ) {
+			logger.info(" headerAuth [ Authorization : Bearer ] Token : {} ", headerAuth );
 			return headerAuth.startsWith("Bearer ") ?  headerAuth.substring(7, headerAuth.length()) :  headerAuth;
 		}
 
 		String paramAuth = request.getParameterMap().containsKey("access_token")
 				? String.valueOf(request.getParameterMap().get("access_token")) : null;
 
-		logger.info(" paramAuth [ access_token ] Token : {} ", headerAuth );
-
 		if (StringUtils.hasText(paramAuth) ) {
+			logger.info(" paramAuth [ access_token ] Token : {} ", headerAuth );
 			return paramAuth;
 		}
 

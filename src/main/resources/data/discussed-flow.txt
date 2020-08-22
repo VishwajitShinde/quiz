@@ -21,7 +21,7 @@ Missing ?
   section -- > general, tag, 
   tagwise -> question ->  
   
------------------------------------------------------------------------------
+------------------------------<< Angular : Stepper >> -----------------------------------------------
 Create Question ->  
  Radio button -> 
  Questions added count ->
@@ -46,8 +46,9 @@ Finish Work for Teache
 Fail ---- invites --> 
 ----------------------------------------:
 
-
-
+================================================NOTE============================================
+1. Start Cloud Config Server : java -jar G:\TECH_LEARNING\spring-boot\configs\config-server\target\config-server-0.0.1-SNAPSHOT.jar
+2. Start Quiz Service Application :  java -jar G:\TECH_LEARNING\spring-boot\quiz\target\quiz-service.jar
 
 
 
