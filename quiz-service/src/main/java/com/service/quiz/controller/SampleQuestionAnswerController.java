@@ -1,20 +1,23 @@
 package com.service.quiz.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.quiz.entity.QuestionBank;
+import com.service.quiz.service.PricingPlanService;
 import com.service.quiz.service.QuestionBankService;
 import com.service.quiz.util.QuestionUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.ConsumptionProbe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -32,12 +35,25 @@ public class SampleQuestionAnswerController {
     @Autowired
     private QuestionBankService service;
 
+    @Autowired
+    private PricingPlanService pricingPlanService;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
+
 
     @RequestMapping(value = "/questions", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Map<String, Object>> getQuestions() {
+    public ResponseEntity<?> getQuestions(
+            @RequestParam(value = "X-api-key", defaultValue = "FX000-FREE-PLAN", required = false)
+            @RequestHeader(value = "X-api-key", defaultValue = "FX000-FREE-PLAN", required = false)
+                    String apiKey ) {
         try {
-            File file = QuestionUtil.getFileFromClassPath(QUESTIONS_ANSWER_JSON_FILE_PATH);
-            List<Map<String, Object>> questions = mapper.readValue(file, List.class);
+
+            //logger.info(" FileContent : {}", QuestionUtil.getFileContent(QUESTIONS_ANSWER_JSON_FILE_PATH, resourceLoader));
+            String content = QuestionUtil.getFileContent(QUESTIONS_ANSWER_JSON_FILE_PATH, resourceLoader);
+            //File file = QuestionUtil.getFileFromClassPath(QUESTIONS_ANSWER_JSON_FILE_PATH, resourceLoader);
+            List<Map<String, Object>> questions = mapper.readValue(content, List.class);
+            //List<Map<String, Object>> questions = mapper.readValue(file, List.class);
             Set<Integer> questionNumbers = QuestionUtil.generateQuestions(questions.size(), 10);
 
             List<Map<String, Object>> selectedQuestions = IntStream
@@ -51,8 +67,28 @@ public class SampleQuestionAnswerController {
                 question.remove("Answer");
             });
 
-            logger.info(" controller : /api/questions, Get , SelectedQuestions :  {} ", mapper.writeValueAsString(selectedQuestions));
-            return selectedQuestions;
+            //logger.info(" controller : /api/questions, Get , SelectedQuestions :  {} ", mapper.writeValueAsString(selectedQuestions));
+           List<String> qids = selectedQuestions.stream().map(qn -> {return qn.get("QnID") + "";}).collect(Collectors.toList());
+            logger.info(" controller : /api/questions, Get , SelectedQuestions :  {} ", qids );
+
+            Bucket bucket = pricingPlanService.resolveBucket(apiKey);
+            ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+            if (probe.isConsumed()) {
+                return ResponseEntity.ok()
+                        .header("X-Rate-Limit-Remaining", Long.toString(probe.getRemainingTokens()))
+                        .body(selectedQuestions);
+            }
+
+            Map<String, String> errorResponse = new LinkedHashMap<>();
+
+            long waitForRefill = probe.getNanosToWaitForRefill() / 1_000_000_000;
+
+            errorResponse.put("X-Rate-Limit-Retry-After-Seconds", String.valueOf(waitForRefill));
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .header("X-Rate-Limit-Retry-After-Seconds", String.valueOf(waitForRefill))
+                    .body(errorResponse);
+                   // .build();
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -63,8 +99,11 @@ public class SampleQuestionAnswerController {
     public Map getAnswers(@RequestBody Set<Integer> questionIds) {
         try {
             logger.info(" controller :/api/Answers, questionIds Request Body : {} ", mapper.writeValueAsString(questionIds));
-            File file = QuestionUtil.getFileFromClassPath(QUESTIONS_ANSWER_JSON_FILE_PATH);
-            List<Map<String, Object>> questions = mapper.readValue(file, List.class);
+            //logger.info(" FileContent : {}", QuestionUtil.getFileContent(QUESTIONS_ANSWER_JSON_FILE_PATH, resourceLoader));
+            String content = QuestionUtil.getFileContent(QUESTIONS_ANSWER_JSON_FILE_PATH, resourceLoader);
+            //File file = QuestionUtil.getFileFromClassPath(QUESTIONS_ANSWER_JSON_FILE_PATH, resourceLoader);
+            List<Map<String, Object>> questions = mapper.readValue(content, List.class);
+            //List<Map<String, Object>> questions = mapper.readValue(file, List.class);
             List<Map<String, Object>> questionAnswers = IntStream
                     .range(0, questions.size())
                     .filter(questionInd -> questionIds.contains(questionInd))
@@ -82,8 +121,11 @@ public class SampleQuestionAnswerController {
     @RequestMapping(value = "/populate/db", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<QuestionBank> populateQuestionsInDB() {
         try {
-            File file = QuestionUtil.getFileFromClassPath(QUESTIONS_ANSWER_JSON_FILE_PATH);
-            List<Map<String, Object>> questions = mapper.readValue(file, List.class);
+            //logger.info(" FileContent : {}", QuestionUtil.getFileContent(QUESTIONS_ANSWER_JSON_FILE_PATH, resourceLoader));
+            String content = QuestionUtil.getFileContent(QUESTIONS_ANSWER_JSON_FILE_PATH, resourceLoader);
+            //File file = QuestionUtil.getFileFromClassPath(QUESTIONS_ANSWER_JSON_FILE_PATH, resourceLoader);
+            List<Map<String, Object>> questions = mapper.readValue(content, List.class);
+            //List<Map<String, Object>> questions = mapper.readValue(file, List.class);
             logger.info(" controller : /populate/db, Get , Questions Size :  {} ", questions.size());
             return service.saveQuestions(getQuestionBank(questions));
         } catch (Exception e) {
@@ -105,7 +147,7 @@ public class SampleQuestionAnswerController {
                   "Answer": 3
              */
             QuestionBank question =
-                    new QuestionBank( map.get("Qn") + "", (String) map.get("Option1"), (String) map.get("Option2"), (String) map.get("Option3"), (String) map.get("Option4"),  map.get("Answer") + "");
+                    new QuestionBank(map.get("Qn") + "", (String) map.get("Option1"), (String) map.get("Option2"), (String) map.get("Option3"), (String) map.get("Option4"), map.get("Answer") + "");
             question.setExamSetterId(1L);
             questionBanks.add(question);
         }
