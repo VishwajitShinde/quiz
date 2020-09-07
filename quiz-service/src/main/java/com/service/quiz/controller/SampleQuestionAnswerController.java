@@ -76,7 +76,7 @@ public class SampleQuestionAnswerController {
             if (probe.isConsumed()) {
                 return ResponseEntity.ok()
                         .header("X-Rate-Limit-Remaining", Long.toString(probe.getRemainingTokens()))
-                        .body(selectedQuestions);
+                        .body(getQuestionBank(selectedQuestions, true));
             }
 
             Map<String, String> errorResponse = new LinkedHashMap<>();
@@ -127,14 +127,14 @@ public class SampleQuestionAnswerController {
             List<Map<String, Object>> questions = mapper.readValue(content, List.class);
             //List<Map<String, Object>> questions = mapper.readValue(file, List.class);
             logger.info(" controller : /populate/db, Get , Questions Size :  {} ", questions.size());
-            return service.saveQuestions(getQuestionBank(questions));
+            return service.saveQuestions(getQuestionBank(questions, false));
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
 
-    List<QuestionBank> getQuestionBank(List<Map<String, Object>> listMap) {
+    List<QuestionBank> getQuestionBank(List<Map<String, Object>> listMap, boolean useSameQID ) {
         List<QuestionBank> questionBanks = new ArrayList<>();
         for (Map<String, Object> map : listMap) {
             /*
@@ -149,6 +149,8 @@ public class SampleQuestionAnswerController {
             QuestionBank question =
                     new QuestionBank(map.get("Qn") + "", (String) map.get("Option1"), (String) map.get("Option2"), (String) map.get("Option3"), (String) map.get("Option4"), map.get("Answer") + "");
             question.setExamSetterId(1L);
+            if( useSameQID )
+                question.setId((int) map.get("QnID"));
             questionBanks.add(question);
         }
         return questionBanks;
